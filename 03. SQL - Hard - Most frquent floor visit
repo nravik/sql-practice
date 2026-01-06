@@ -1,0 +1,24 @@
+Day 03 Excercise
+
+WITH 
+UniqueResources AS (
+    -- Get distinct name and resource combinations first
+    SELECT DISTINCT name, resources
+    FROM Entries
+),
+FloorCounts AS (
+    -- Find the most visited floor
+    SELECT 
+        name, 
+        floor, 
+        RANK() OVER(PARTITION BY name ORDER BY COUNT(*) DESC) as rnk
+    FROM Entries
+    GROUP BY name, floor
+)
+SELECT 
+    e.name,
+    COUNT(*) AS total_visits,
+    (SELECT floor FROM FloorCounts fc WHERE fc.name = e.name AND rnk = 1) AS most_visited_floor,
+    (SELECT STRING_AGG(resources, ',') FROM UniqueResources ur WHERE ur.name = e.name) AS resources_used
+FROM Entries e
+GROUP BY e.name;
