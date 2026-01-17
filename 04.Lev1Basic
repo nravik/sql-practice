@@ -1,0 +1,8 @@
+04. BASIC QUERY
+
+
+SELECT Name,Color,ListPrice,ProductNumber
+	from Production.Product
+	WHERE COLOR IN ('BLACK','RED')
+	AND LISTPRICE>1000
+	AND PRODUCTNUMBER LIKE 'BK%'
