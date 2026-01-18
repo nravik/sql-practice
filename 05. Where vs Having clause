@@ -1,0 +1,11 @@
+--Practiced in adventure DB ms-sql;
+
+	/*Calculate the number of products and the average list price for each color in the Production.Product table. 
+	Only include products that have a color assigned (ignore NULL) and only show colors that have an average price greater than $500.*/
+
+
+Select Color,count(*) as Num_Of_Products, AVG(LISTPRICE) as Avg_List_Price
+from Production.Product as pp
+WHERE Color IS NOT NULL
+GROUP BY Color
+HAVING AVG(LISTPRICE) > 500
