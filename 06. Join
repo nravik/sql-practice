@@ -1,0 +1,16 @@
+📝 Practice Question 4
+Task: Create a list of all products and their subcategories.
+
+Table A: Production.Product (Contains the column Name)
+
+Table B: Production.ProductSubcategory (Contains the column Name)
+
+The Link: Both tables have a ProductSubcategoryID.
+
+
+
+
+SELECT p.NAME productname, ps.name productsubcatname FROM Production.Product as p
+LEFT JOIN  Production.ProductSubcategory as ps
+ ON p.ProductSubcategoryID = ps.ProductSubcategoryID;
+
