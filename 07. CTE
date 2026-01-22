@@ -1,0 +1,11 @@
+---
+
+
+
+
+with cte as (
+
+select name, color, listprice, DENSE_RANK() over (partition by color order by listprice desc) as colorprice 
+from production.product  WHERE Color IS NOT NULL)
+
+select * from cte where Colorprice=1
