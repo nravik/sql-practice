@@ -1,0 +1,27 @@
+/* Author: RAVI
+Purpose: Identify Top 2 Salespeople per Territory using DENSE_RANK.
+Level: Advanced Intermediate
+*/
+
+WITH SALESRANKING AS (
+    SELECT 
+        SP.BusinessEntityID,
+        ST.Name AS TerritoryName,
+        SP.SalesYTD,
+        DENSE_RANK() OVER (
+            PARTITION BY ST.Name 
+            ORDER BY SP.SalesYTD DESC
+        ) AS SalesRank
+    FROM Sales.SalesPerson AS SP
+    LEFT JOIN Sales.SalesTerritory AS ST
+        ON SP.TerritoryID = ST.TerritoryID
+    WHERE SP.SalesYTD > 0 -- Predicate Pushdown: Filter before ranking for performance
+)
+SELECT 
+    TerritoryName,
+    BusinessEntityID,
+    SalesYTD,
+    SalesRank
+FROM SALESRANKING
+WHERE SalesRank <= 2
+ORDER BY TerritoryName, SalesRank;
