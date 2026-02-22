@@ -1,0 +1,33 @@
+The Business Question
+
+Our executive team needs to evaluate our historical sales performance. 
+Specifically, they want to see a summary of Total Orders and Total Revenue for every year in our database. Most importantly, they need a Ranking of these years based on revenue to identify our peak growth periods and historical highs.
+
+The Solution
+
+This query utilizes a Common Table Expression (CTE) to first aggregate the raw transactional data into annual summaries, and then applies an Analytical Window Function (RANK) to evaluate those summaries against each other.
+
+
+
+Topic: Yearly Revenue Aggregation and Comparative Ranking
+
+Database: AdventureWorks
+
+QUERY: 
+
+WITH YEARLYPERFORMANCE AS (
+    -- Step 1: Extract year and aggregate metrics from headers
+    SELECT 
+        YEAR(OrderDate) AS OrderYear,
+        COUNT(DISTINCT SalesOrderNumber) AS TotalOrders,
+        SUM(TotalDue) AS TotalRevenue
+    FROM Sales.SalesOrderHeader
+    GROUP BY YEAR(OrderDate)
+)
+-- Step 2: Apply ranking to the aggregated result set
+SELECT 
+    OrderYear,
+    TotalRevenue,
+    RANK() OVER (ORDER BY TotalRevenue DESC) AS RevenueRank
+FROM YEARLYPERFORMANCE
+ORDER BY OrderYear; -- Sorting chronologically for the final report
