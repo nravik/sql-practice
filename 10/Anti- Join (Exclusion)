@@ -1,0 +1,13 @@
+The Business Question
+"Identify all products in the company catalog that have never been sold. This report is required by the Warehouse Manager to identify 'Dead Stock' that is taking up physical space but generating zero revenue."
+
+
+SELECT 
+    p.ProductID,
+    p.Name 
+FROM Production.Product AS p
+WHERE NOT EXISTS (
+    SELECT 1 
+    FROM Sales.SalesOrderDetail AS sod
+    WHERE p.ProductID = sod.ProductID
+);
