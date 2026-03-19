@@ -1,0 +1,17 @@
+"Total revenue is a 'Lagging Indicator' (it tells us what happened). We need a 'Leading Indicator' like Sales Momentum. Calculate a 3-order moving average for each Territory. 
+This allows us to see the 'Pulse' of the sales flow and detect if a region is heating up or cooling down, regardless of their total year-end volume."
+
+
+SELECT 
+    SalesOrderID, 
+    TerritoryID, 
+    OrderDate, 
+    TotalDue,
+    -- The Moving Average Calculation
+    AVG(TotalDue) OVER (
+        PARTITION BY TerritoryID 
+        ORDER BY OrderDate ASC 
+        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW
+    ) AS ThreeOrderMovingAvg
+FROM Sales.SalesOrderHeader
+ORDER BY TerritoryID, OrderDate;
