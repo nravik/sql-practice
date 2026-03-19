@@ -1,0 +1,12 @@
+
+SELECT 
+    st.Name AS TerritoryName,
+    -- Column 1: Sums only the 2013 orders
+    SUM(CASE WHEN YEAR(soh.OrderDate) = 2013 THEN soh.TotalDue ELSE 0 END) AS Revenue_2013,
+    -- Column 2: Sums only the 2014 orders
+    SUM(CASE WHEN YEAR(soh.OrderDate) = 2014 THEN soh.TotalDue ELSE 0 END) AS Revenue_2014
+FROM Sales.SalesTerritory AS st
+LEFT JOIN Sales.SalesOrderHeader AS soh 
+    ON st.TerritoryID = soh.TerritoryID
+GROUP BY st.Name
+ORDER BY Revenue_2014 DESC;
