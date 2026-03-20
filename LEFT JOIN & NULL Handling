@@ -1,0 +1,16 @@
+The Accounting department is panicking. They noticed that the total sales in our "Category Reports" are lower than the total sales in the "Bank Account.
+
+SELECT 
+    -- Replace NULLs with a readable label
+    ISNULL(ps.Name, 'Uncategorized') AS SubcategoryName,
+    -- Calculate total revenue for the category
+    SUM(sod.LineTotal) AS TotalRevenue,
+    -- Count how many items were sold in this category
+    COUNT(sod.SalesOrderDetailID) AS NumberOfSales
+FROM Sales.SalesOrderDetail AS sod
+INNER JOIN Production.Product AS pp
+    ON sod.ProductID = pp.ProductID
+LEFT JOIN Production.ProductSubcategory AS ps
+    ON pp.ProductSubcategoryID = ps.ProductSubcategoryID
+GROUP BY ps.Name
+ORDER BY TotalRevenue DESC;
